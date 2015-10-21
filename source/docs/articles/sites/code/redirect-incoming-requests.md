@@ -30,9 +30,9 @@ Automatic resolution of domains is not supported. For each domain that you want 
 
 ## Redirect to a Common Domain
 
-While it’s good for visitors and DNS to resolve both www and the domain itself, it's best practice to choose one or the other and redirect from www to non-www (or vice versa, your call). This optimizes SEO by avoiding duplicate content and prevents session strangeness, where a user can be signed on one domain but logged out of other domains at the same time.  Choose one of the blocks of code below:
+While it’s good for visitors and DNS to resolve both www and the domain itself, it's best practice to choose one or the other and redirect from www to non-www (or vice versa, your call). This optimizes SEO by avoiding duplicate content and prevents session strangeness, where a user can be signed on one domain but logged out of other domains at the same time.  Choose the following block to standardize on the www domain:
 ```
-    // Require WWW.
+    // Redirect all traffic to WWW. For example www.yoursite.com
     if (isset($_SERVER['PANTHEON_ENVIRONMENT']) &&
       $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
       if ($_SERVER['HTTP_HOST'] == 'yoursite.com' ||
@@ -43,8 +43,19 @@ While it’s good for visitors and DNS to resolve both www and the domain itself
       }
     }
 ```
+If you prefer to use the bare domain you will need to use this block and run your DNS settings through a service like Cloudflare that provides a CNAME flattening service.  <a href="https://pantheon.io/docs/articles/sites/cloudflare-cdn-and-dns/">Cloudflare CDN and DNS on Pantheon</a>  
+
+<div class="alert alert-info" role="alert">
+<h4>Note</h4>
+If you are running the site on a Pro plan or above with an SSL certificate, you may use the snippet below *without* the Cloudflare setup. </div>
+
+
+To direct all traffic to the bare or naked domain using Cloudflare:
+ - Set up an account at Cloudflare (free tier will work) https://www.cloudflare.com/
+ - Set up a CNAME for both domains (www and bare).  This will require that you remove the 'A' record that is automatically generated for the domain when you add it to your account.
+ - Add the following snippet to your settings.php or wp-config.php:
 ```
-    // Remove WWW.
+    // Redirect all traffic to non-www. For example yoursite.com
     if (isset($_SERVER['PANTHEON_ENVIRONMENT']) &&
       $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
       if ($_SERVER['HTTP_HOST'] == 'www.yoursite.com' ||
