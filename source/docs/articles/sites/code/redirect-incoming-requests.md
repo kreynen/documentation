@@ -30,19 +30,9 @@ Automatic resolution of domains is not supported. For each domain that you want 
 
 ## Redirect to a Common Domain
 
-While it’s good for visitors and DNS to resolve both www and the domain itself, it's best practice to choose one or the other and redirect from www to non-www (or vice versa, your call). This optimizes SEO by avoiding duplicate content and prevents session strangeness, where a user can be signed on one domain but logged out of other domains at the same time.  Choose the following block to standardize on the www domain:
-```
-    // Redirect all traffic to WWW. For example: www.yoursite.com
-    if (isset($_SERVER['PANTHEON_ENVIRONMENT']) &&
-      $_SERVER['PANTHEON_ENVIRONMENT'] === 'live') {
-      if ($_SERVER['HTTP_HOST'] == 'yoursite.com' ||
-          $_SERVER['HTTP_HOST'] == 'live-yoursite.pantheon.io') {
-        header('HTTP/1.0 301 Moved Permanently');
-        header('Location: http://www.yoursite.com'. $_SERVER['REQUEST_URI']);
-        exit();
-      }
-    }
-```
+While it’s good for visitors and DNS to resolve both www and the domain itself, it's best practice to choose one or the other and redirect from www to non-www (or vice versa, your call). This optimizes SEO by avoiding duplicate content and prevents session strangeness, where a user can be signed on one domain but logged out of other domains at the same time.  Pantheon's www-redirection service automatically redirectS requests to the www subdomain so long as DNS has been configured appropriately. For details, see [Domains and DNS](https://pantheon.io/docs/articles/sites/domains/#step-3-configure-your-dns).
+
+
 If you prefer to use the bare domain, use the following code block and run your DNS settings through a service that supports CNAME flattening, such as CloudFlare. For details, see [Cloudflare CDN and DNS on Pantheon](/docs/articles/sites/cloudflare-cdn-and-dns).
 
 <div class="alert alert-info" role="alert">
